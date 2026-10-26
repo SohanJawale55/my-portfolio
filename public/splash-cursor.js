@@ -1,6 +1,9 @@
 (function(){
-if(matchMedia('(prefers-reduced-motion:reduce)').matches||matchMedia('(pointer:coarse)').matches)return;
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+const touchDev=matchMedia('(pointer:coarse)').matches;
 const config={SIM_RESOLUTION:128,DYE_RESOLUTION:720,DENSITY_DISSIPATION:6,VELOCITY_DISSIPATION:4,PRESSURE:0.1,PRESSURE_ITERATIONS:20,CURL:1,SPLAT_RADIUS:0.08,SPLAT_FORCE:2500,SHADING:true,COLOR_UPDATE_SPEED:10,RAINBOW_MODE:false,COLOR:'#7C3AED'};
+// lighter settings on phones/tablets so it stays smooth
+if(touchDev){config.SIM_RESOLUTION=96;config.DYE_RESOLUTION=512;config.PRESSURE_ITERATIONS=12}
 const box=document.createElement('div');box.setAttribute('aria-hidden','true');box.className='splash-fx';box.style.cssText='position:fixed;top:0;left:0;z-index:50;pointer-events:none;width:100%;height:100%';
 const canvas=document.createElement('canvas');canvas.style.cssText='width:100vw;height:100vh;display:block';box.appendChild(canvas);document.body.appendChild(box);
 function P(){this.id=-1;this.texcoordX=0;this.texcoordY=0;this.prevTexcoordX=0;this.prevTexcoordY=0;this.deltaX=0;this.deltaY=0;this.down=false;this.moved=false;this.color=[0,0,0]}
@@ -90,9 +93,10 @@ function move(p,x,y,c){p.prevTexcoordX=p.texcoordX;p.prevTexcoordY=p.texcoordY;p
 let first=false;
 const onDown=e=>{if(document.body.classList.contains('no-fx'))return;const p=pointers[0];down(p,-1,spr(e.clientX),spr(e.clientY));const c=genColor();c.r*=3;c.g*=3;c.b*=3;splat(p.texcoordX,p.texcoordY,10*(Math.random()-.5),30*(Math.random()-.5),c)};
 const onMove=e=>{if(document.body.classList.contains('no-fx'))return;const p=pointers[0];const x=spr(e.clientX),y=spr(e.clientY);if(!first){move(p,x,y,genColor());first=true}else move(p,x,y,p.color)};
-const onTS=e=>{const p=pointers[0];for(const t of e.targetTouches)down(p,t.identifier,spr(t.clientX),spr(t.clientY))};
-const onTM=e=>{const p=pointers[0];for(const t of e.targetTouches)move(p,spr(t.clientX),spr(t.clientY),p.color)};
+const onTS=e=>{if(document.body.classList.contains('no-fx'))return;const p=pointers[0];for(const t of e.targetTouches){down(p,t.identifier,spr(t.clientX),spr(t.clientY));const c=genColor();c.r*=3;c.g*=3;c.b*=3;splat(p.texcoordX,p.texcoordY,10*(Math.random()-.5),30*(Math.random()-.5),c)}};
+const onTM=e=>{if(document.body.classList.contains('no-fx'))return;const p=pointers[0];for(const t of e.targetTouches)move(p,spr(t.clientX),spr(t.clientY),p.color)};
 const onTE=()=>{pointers[0].down=false};
-addEventListener('mousedown',onDown);addEventListener('mousemove',onMove);addEventListener('touchstart',onTS);addEventListener('touchmove',onTM,false);addEventListener('touchend',onTE);
+if(!touchDev){addEventListener('mousedown',onDown);addEventListener('mousemove',onMove)}
+addEventListener('touchstart',onTS,{passive:true});addEventListener('touchmove',onTM,{passive:true});addEventListener('touchend',onTE,{passive:true});addEventListener('touchcancel',onTE,{passive:true});
 frame();
 })();

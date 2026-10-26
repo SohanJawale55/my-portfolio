@@ -109,6 +109,25 @@ export function Layout() {
     </>
   )
 }
+/** Live floating line: skills scroll sideways in a loop, bob gently, pause on hover. */
+function SkillMarquee({ items, label, className = '', reverse = false }: { items: string[]; label: string; className?: string; reverse?: boolean }) {
+  if (!items.length) return null
+  const reps = Math.max(2, Math.ceil(12 / items.length))
+  const loop = Array.from({ length: reps }, () => items).flat()
+  const dur = Math.round(loop.length * 2.4)
+  const style = { '--mq-dur': `${dur}s` } as CSSProperties
+  return (
+    <div className={`ab-mq ${reverse ? 'mq-rev' : ''} ${className}`} style={style} aria-label={`${label}: ${items.join(', ')}`}>
+      <div className="ab-mq-track">
+        {[0, 1].map((g) => (
+          <ul key={g} className={`ab-mq-group ${className === 'ab-sk' ? 'ab-skills' : ''}`} aria-hidden={g === 1 ? 'true' : undefined}>
+            {loop.map((k, n) => <li key={`${k}-${n}`} className={n >= items.length ? 'dup' : undefined} style={{ animationDelay: `${(n % items.length) * -0.6}s` }}>{k}</li>)}
+          </ul>
+        ))}
+      </div>
+    </div>
+  )
+}
 function Cover({ p, i }: { p: Project; i: number }) {
   const src = p.cover || p.images[0]
   return <div className="cover" style={{ background: TINTS[i % TINTS.length] }}>{src ? <img src={src} alt={p.title} loading="lazy" /> : <span className="note">Cover not uploaded</span>}</div>
@@ -196,7 +215,7 @@ export function Home() {
       <section id="work" className="wrap"><h2>Selected work</h2><WorkSection limit={6} /><p><Link className="btn" to="/work">All projects</Link></p></section>
       <section id="disciplines" className="band"><div className="wrap"><h2>Two disciplines, one workflow</h2>
         <div className="two">{services.map((s) => (
-          <div key={s.id}><h3>{s.title}</h3><p>{s.description}</p><ul>{s.skills.map((k) => <li key={k}>{k}</li>)}</ul>{s.tools && <ToolList tools={s.tools} />}</div>
+          <div key={s.id}><h3>{s.title}</h3><p>{s.description}</p><SkillMarquee items={s.skills} label={s.title} className="two-mq" />{s.tools && <ToolList tools={s.tools} />}</div>
         ))}</div>
       </div></section>
       <section id="about" className="wrap about">
@@ -207,7 +226,7 @@ export function Home() {
           <p className="lead">{a.description}</p>
           {a.skills.length > 0 && <>
             <h3 className="ab-label">Skills</h3>
-            <ul className="ab-skills">{a.skills.map((s) => <li key={s}>{s}</li>)}</ul>
+            <SkillMarquee items={a.skills} label="Skills" className="ab-sk" />
           </>}
           {experience.length > 0 && <>
             <h3 className="ab-label">Experience</h3>

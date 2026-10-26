@@ -4,7 +4,7 @@ let dead=false;const T=THREE,RM=matchMedia('(prefers-reduced-motion:reduce)').ma
 const FRONT_URL=FRONT0||null,CARD='#F3F3F0',STRAP=(getComputedStyle(document.documentElement).getPropertyValue('--primary')||'').trim()||'#7C3AED';
 let R;try{R=new T.WebGLRenderer({antialias:true,alpha:true})}catch(e){return}
 R.setClearColor(0,0);R.outputColorSpace=T.SRGBColorSpace;R.toneMapping=T.NeutralToneMapping||T.ACESFilmicToneMapping;R.toneMappingExposure=T.NeutralToneMapping?1:1.15;
-const cv=R.domElement;cv.style.cssText='display:block;width:100%;height:100%;touch-action:pan-y';
+const cv=R.domElement;cv.style.cssText='display:block;position:absolute;top:0;left:0;width:100%;height:100%;touch-action:pan-y';
 host.appendChild(cv);const fb=host.querySelector('.box');if(fb)fb.style.display='none';
 const sc=new T.Scene(),cam=new T.PerspectiveCamera(24,1,.1,200);
 const es=new T.Scene();es.background=new T.Color(.035,.035,.04);const pg=new T.PlaneGeometry(1,1);
@@ -15,11 +15,12 @@ const W=1.6,H=2.25,TH=.018,BV=.007,HO=H/2+.04,D=2.3;
 const rr=(p,x,y,w,h,r)=>{const k=r*.4477;p.moveTo(x+r,y);p.lineTo(x+w-r,y);p.bezierCurveTo(x+w-k,y,x+w,y+k,x+w,y+r);p.lineTo(x+w,y+h-r);p.bezierCurveTo(x+w,y+h-k,x+w-k,y+h,x+w-r,y+h);p.lineTo(x+r,y+h);p.bezierCurveTo(x+k,y+h,x,y+h-k,x,y+h-r);p.lineTo(x,y+r);p.bezierCurveTo(x,y+k,x+k,y,x+r,y)};
 const o=new T.Shape();rr(o,-W/2+BV,-H/2+BV,W-2*BV,H-2*BV,.2);
 const hl=new T.Path();rr(hl,-.17-BV,H/2-.165-BV,.34+2*BV,.07+2*BV,.035+BV);o.holes.push(hl);
-const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;return{t,x:c.getContext('2d')}};
+const K=2,MAXA=Math.min(16,R.capabilities.getMaxAnisotropy?R.capabilities.getMaxAnisotropy():4);
+const mk=(w,h)=>{const c=document.createElement('canvas');c.width=w*K;c.height=h*K;const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=MAXA;t.generateMipmaps=true;t.minFilter=T.LinearMipmapLinearFilter;t.magFilter=T.LinearFilter;const x=c.getContext('2d');x.scale(K,K);x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';return{t,x}};
 const F=mk(768,1080),B=mk(768,1080),S=mk(128,512);S.t.wrapT=T.RepeatWrapping;
 let img=null;
 function paint(){
-let x=F.x;x.fillStyle=CARD;x.fillRect(0,0,768,1080);
+let x=F.x;x.textRendering='geometricPrecision';x.fillStyle=CARD;x.fillRect(0,0,768,1080);
 if(img){const s=Math.max(656/img.width,img.height>0?700/img.height:1),w=img.width*s,h=img.height*s;x.save();x.beginPath();x.rect(56,60,656,700);x.clip();x.drawImage(img,56+(656-w)/2,60,w,h);x.restore()}
 else{x.fillStyle='#E1E3DE';x.fillRect(56,60,656,700);x.setLineDash([14,10]);x.strokeStyle='#8A8F98';x.lineWidth=3;x.strokeRect(58,62,652,696);x.setLineDash([]);x.fillStyle='#5C616B';x.font='500 30px Hanken Grotesk,Arial';x.textAlign='center';x.fillText('Your portrait here',384,410);x.textAlign='left'}
 x.fillStyle='#121418';x.font='800 64px Bricolage Grotesque,Arial';x.fillText('Sohan Jawale',56,840);
@@ -54,7 +55,7 @@ const strap=new T.Mesh(sg,new T.MeshPhysicalMaterial({map:S.t,roughness:.68,side
 const N=6,px=new Float64Array(N),py=new Float64Array(N),ox=new Float64Array(N),oy=new Float64Array(N),iw=[0,1,1,1,.45,.3];
 let ax=0,ay=0,rest=1,vh=1,ready=false,t=0,fa=0,fv=0,ft=0,gx=0,gy=0,grab=null;
 function place(intro){for(let i=0;i<5;i++){px[i]=ax+(intro?rest*i:0);py[i]=intro?ay:ay-rest*i}px[5]=px[4]+(intro?D:0);py[5]=py[4]-(intro?0:D);for(let i=0;i<N;i++){ox[i]=px[i];oy[i]=py[i]}}
-function size(){const w=host.clientWidth,h=host.clientHeight;if(w<2||h<2)return false;R.setPixelRatio(Math.min(devicePixelRatio||1,2));R.setSize(w,h,false);const asp=w/h;vh=H/.6;if(vh*asp<W/.72)vh=W/.72/asp;cam.aspect=asp;cam.position.set(0,0,vh/2/Math.tan(12*Math.PI/180));cam.lookAt(0,0,0);cam.updateProjectionMatrix();ax=0;ay=vh/2+.2;rest=(ay-(vh/2-vh*.27))/4;if(!ready){place(!RM);ready=true}return true}
+function size(){const w=host.clientWidth,h=host.clientHeight;if(w<2||h<2)return false;const mx=Math.round(w*.8),cw=w+2*mx;const mb=Math.round(h*.45),ch=h+mb;cv.style.left=-mx+'px';cv.style.width=cw+'px';cv.style.height=ch+'px';R.setPixelRatio(Math.min(Math.max(devicePixelRatio||1,1.5),2));R.setSize(cw,ch,false);const asp=w/h;vh=H/.6;if(vh*asp<W/.72)vh=W/.72/asp;const zc=vh/2/Math.tan(12*Math.PI/180),vh2=vh*ch/h,cy=-(vh2-vh)/2;cam.aspect=cw/ch;cam.fov=2*Math.atan(vh2/2/zc)*180/Math.PI;cam.position.set(0,cy,zc);cam.lookAt(0,cy,0);cam.updateProjectionMatrix();ax=0;ay=vh/2+.2;rest=(ay-(vh/2-vh*.27))/4;if(!ready){place(!RM);ready=true}return true}
 const cons=[[0,1,0],[1,2,0],[2,3,0],[3,4,0],[4,5,1]];
 function step(dt){const wx=RM?0:(Math.sin(t*.53)*.7+Math.sin(t*1.31+1.7)*.3)*2.5;
 for(let i=1;i<N;i++){let vx=(px[i]-ox[i])*.997,vy=(py[i]-oy[i])*.997;const m=Math.hypot(vx,vy);if(m>.5){vx*=.5/m;vy*=.5/m}ox[i]=px[i];oy[i]=py[i];px[i]+=vx+wx*dt*dt;py[i]+=vy-30*dt*dt}
