@@ -1,0 +1,37 @@
+{
+  "footer": {
+    "text": "Designing digital experiences. Building them into reality.",
+    "copyright": "© 2026 Sohan Prakash Jawale",
+    "show_socials": true,
+    "show_contact": true,
+    "show_nav": true
+  },
+  "theme": {
+    "light": {
+      "primary": "#7C3AED",
+      "secondary": "#A78BFA",
+      "accent": "#7C3AED",
+      "background": "#F1F2F0",
+      "card": "#E7E9E5",
+      "border": "#C9CDC8",
+      "text": "#121418",
+      "button": "#7C3AED",
+      "navigation": "#F1F2F0",
+      "footer": "#E7E9E5",
+      "cursor": "#7C3AED"
+    },
+    "dark": {
+      "primary": "#A78BFA",
+      "secondary": "#8B5CF6",
+      "accent": "#A78BFA",
+      "background": "#0F1115",
+      "card": "#171A20",
+      "border": "#2D323B",
+      "text": "#ECEDEF",
+      "button": "#7C3AED",
+      "navigation": "#0F1115",
+      "footer": "#171A20",
+      "cursor": "#7C3AED"
+    }
+  }
+}

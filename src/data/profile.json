@@ -1,0 +1,30 @@
+{
+  "hero": {
+    "image": "/images/profile/8a6c990c7ab947d3b9a0d30bcf103157.png",
+    "title": "Designing digital experiences.",
+    "heading": "Building them into reality.",
+    "subtitle": "Creative Designer, UI/UX Designer and Frontend Developer.",
+    "description": "I'm Sohan Jawale. I design thoughtful interfaces and build them as responsive, user-centered web applications.",
+    "primary_label": "View projects",
+    "primary_url": "#work",
+    "secondary_label": "Contact me",
+    "secondary_url": "#contact",
+    "image_alt": "",
+    "card_name": "Sohan Jawale",
+    "card_handle": "",
+    "card_status": "",
+    "card_contact": "Contact"
+  },
+  "about": {
+    "image": "/images/profile/a550e72658ca458d908042c44383ef02.png",
+    "heading": "Designer and developer, comfortable on both sides of the handoff.",
+    "description": "With more than a year of professional experience, I focus on user-centered interfaces, responsive web applications and reusable components.",
+    "resume_url": ""
+  },
+  "contact": {
+    "heading": "Have a project in mind?",
+    "text": "Reach out directly on any of these. I'll reply as soon as I can.",
+    "email": "your-email@example.com",
+    "phone": "+91 00000 00000"
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "fl0",
+    "title": "UI/UX Design",
+    "description": "Creating intuitive, user-friendly interfaces with seamless experiences and modern visual design.",
+    "image": "/images/services/b3387510312f4271ba55b9db20ef0932.png"
+  },
+  {
+    "id": "fl1",
+    "title": "Landing Page Design",
+    "description": "Designing engaging, conversion-focused landing pages that capture attention and drive results.",
+    "image": "/images/services/cb7401e86f3f4cfebc004cbf16d031d9.webp"
+  },
+  {
+    "id": "fl2",
+    "title": "Website Design",
+    "description": "Building modern, responsive website designs that reflect your brand and engage visitors.",
+    "image": "/images/services/da97b4c884a245d18f0398478da87665.png"
+  },
+  {
+    "id": "fl3",
+    "title": "Logo Design",
+    "description": "Crafting unique, memorable logos that represent your brand identity and vision.",
+    "image": "/images/services/1b1b6e0cbc1a4e619a26f3d8db20a34e.webp"
+  },
+  {
+    "id": "fl4",
+    "title": "Mobile App Design",
+    "description": "Designing intuitive, visually appealing mobile apps for smooth and enjoyable user experiences.",
+    "image": "/images/services/c14b2eb70f994ec6a86d26818bfaa26d.webp"
+  }
+]

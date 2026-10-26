@@ -1,0 +1,42 @@
+[
+  {
+    "id": "uiux",
+    "title": "UI/UX Design",
+    "description": "Interfaces shaped around the people using them, from flows and wireframes to polished, handoff-ready screens.",
+    "skills": [
+      "UI Design",
+      "UX Design",
+      "Wireframing",
+      "Prototyping",
+      "Design Systems"
+    ],
+    "tools": [
+      "figma",
+      "framer",
+      "canva"
+    ]
+  },
+  {
+    "id": "fe",
+    "title": "Frontend Development",
+    "description": "Responsive, reusable components built in React and TypeScript, connected to real APIs.",
+    "skills": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "REST APIs",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Responsive Design",
+      "Git & GitHub"
+    ],
+    "tools": [
+      "vscode",
+      "chatgpt",
+      "claude",
+      "lovable"
+    ]
+  }
+]
