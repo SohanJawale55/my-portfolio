@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, NavLink, Outlet, useLocation, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Download, Dribbble, Facebook, Github, Instagram, Link2, Linkedin, Mail, Moon, Palette, Phone, Sun, Twitter, X as CloseIcon, Youtube } from 'lucide-react'
 import ProfileCard from './ProfileCard'
@@ -109,6 +109,15 @@ export function Layout() {
     </>
   )
 }
+/** Hero headline: words rise in one by one (blur to sharp), then the second line keeps a soft light sweep. */
+function HeadLine({ text, start }: { text: string; start: number }) {
+  const words = text.split(/\s+/).filter(Boolean)
+  return (
+    <span className="ln hl" aria-hidden="true">
+      <span>{words.map((w, i) => <Fragment key={`${w}-${i}`}><em className="w" style={{ '--i': start + i } as CSSProperties}>{w}</em>{' '}</Fragment>)}</span>
+    </span>
+  )
+}
 /** Live floating line: skills scroll sideways in a loop, bob gently, pause on hover. */
 function SkillMarquee({ items, label, className = '', reverse = false }: { items: string[]; label: string; className?: string; reverse?: boolean }) {
   if (!items.length) return null
@@ -197,7 +206,7 @@ export function Home() {
     <>
       <div className="wrap hero2">
         <div className="hero-copy">
-          <h1><span className="ln"><span>{h.title}</span></span><span className="ln"><span>{h.heading}</span></span></h1>
+          <h1 aria-label={`${h.title} ${h.heading}`}><HeadLine text={h.title} start={0} /><HeadLine text={h.heading} start={h.title.split(/\s+/).filter(Boolean).length} /></h1>
           <p className="id">{h.subtitle}</p>
           <p className="lead">{h.description}</p>
           <div className="cta">
