@@ -1,5 +1,29 @@
 [
   {
+    "id": "katjas-musikgarten",
+    "title": "Katjas Musikgarten – Music Education Website",
+    "slug": "katjas-musikgarten",
+    "category": "Development",
+    "short": "A modern, responsive German-language website for a children's music education platform, with music programs, course schedules, registration and a blog.",
+    "detail": "Developed a modern, responsive German-language website for a children's music education platform. Designed an intuitive, user-friendly interface featuring music programs, course schedules, registration, and blog sections. Integrated social media links and WhatsApp communication to improve accessibility and user engagement, ensuring a seamless experience across all devices.",
+    "tech": [],
+    "images": [
+      "/images/projects/Screenshot%202026-10-27%20115908.png",
+      "/images/projects/Screenshot%202026-10-27%20120046.png",
+      "/images/projects/Screenshot%202026-10-27%20120202.png",
+      "/images/projects/Screenshot%202026-10-27%20120232.png"
+    ],
+    "cover": "/images/projects/Screenshot%202026-10-27%20115908.png",
+    "live_url": "",
+    "source_url": "",
+    "featured": false,
+    "published": true,
+    "year": "",
+    "industry": "Music Education",
+    "client": "",
+    "duration": ""
+  },
+  {
     "id": "jbss-exim",
     "title": "JBSS Exim",
     "slug": "jbss-exim",
@@ -59,7 +83,8 @@
     "year": "2026",
     "industry": "Healthcare & Maternal Health Management",
     "client": "Government of Odisha",
-    "duration": "10 to 15 Days"
+    "duration": "10 to 15 Days",
+    "home_order": 4
   },
   {
     "id": "create-icil",
@@ -152,7 +177,8 @@
     "year": "2025",
     "industry": "Document Management",
     "client": "",
-    "duration": "15 to 20 Days"
+    "duration": "15 to 20 Days",
+    "home_order": 5
   },
   {
     "id": "iskcon-nashik",
@@ -192,7 +218,8 @@
     "year": "2026",
     "industry": "Religious & Spiritual Organizations",
     "client": "ISKCON Nashik – Sri Sri Radha Madan Gopal Temple",
-    "duration": "August 2026 – September 2026"
+    "duration": "August 2026 – September 2026",
+    "home_order": 1
   },
   {
     "id": "spaarash",
@@ -222,7 +249,8 @@
     "year": "2025",
     "industry": "Beauty, Fragrance & E-commerce",
     "client": "",
-    "duration": "7 to 8 Days"
+    "duration": "7 to 8 Days",
+    "home_order": 6
   },
   {
     "id": "bhook",
@@ -254,7 +282,8 @@
     "year": "2026",
     "industry": "Food & Beverage / Food Delivery",
     "client": "Personal Project / UI Design Concept",
-    "duration": ""
+    "duration": "",
+    "home_order": 2
   },
   {
     "id": "e9754ccf-fedf-4526-a881-00548f522bd2",
@@ -322,6 +351,7 @@
     "live_url": "",
     "source_url": "",
     "featured": true,
-    "published": true
+    "published": true,
+    "home_order": 3
   }
 ]

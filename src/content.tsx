@@ -9,7 +9,7 @@ import freelance from './data/freelance.json'
 import socialLinks from './data/social-links.json'
 import settings from './data/settings.json'
 
-export type Project = { id: string; title: string; slug: string; category: string; short: string; detail: string; tech: string[]; images: string[]; cover: string; year: string; industry: string; client: string; duration: string; live_url: string; source_url: string; featured: boolean; published: boolean }
+export type Project = { id: string; title: string; slug: string; category: string; short: string; detail: string; tech: string[]; images: string[]; cover: string; year: string; industry: string; client: string; duration: string; live_url: string; source_url: string; featured: boolean; published: boolean; home_order?: number }
 export type Exp = { id: string; title: string; company: string; start: string; end: string; description: string; responsibilities: string[] }
 export type Service = { id: string; title: string; description: string; skills: string[]; tools?: string[] }
 export type Freelance = { id: string; title: string; description: string; image: string }

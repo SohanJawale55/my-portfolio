@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, NavLink, Outlet, useLocation, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Download, Dribbble, Facebook, Github, Instagram, Link2, Linkedin, Mail, Moon, Palette, Phone, Sun, Twitter, X as CloseIcon, Youtube } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Dribbble, Facebook, Github, Instagram, Link2, Linkedin, Mail, Moon, Palette, Phone, Sun, Twitter, X as CloseIcon, Youtube } from 'lucide-react'
 import ProfileCard from './ProfileCard'
 import { ToolList } from './ToolIcons'
 import { mergeTheme, useThemeKey } from './theme'
@@ -109,34 +109,6 @@ export function Layout() {
     </>
   )
 }
-/** Hero headline: words rise in one by one (blur to sharp), then the second line keeps a soft light sweep. */
-function HeadLine({ text, start }: { text: string; start: number }) {
-  const words = text.split(/\s+/).filter(Boolean)
-  return (
-    <span className="ln hl" aria-hidden="true">
-      <span>{words.map((w, i) => <Fragment key={`${w}-${i}`}><em className="w" style={{ '--i': start + i } as CSSProperties}>{w}</em>{' '}</Fragment>)}</span>
-    </span>
-  )
-}
-/** Live floating line: skills scroll sideways in a loop, bob gently, pause on hover. */
-function SkillMarquee({ items, label, className = '', reverse = false }: { items: string[]; label: string; className?: string; reverse?: boolean }) {
-  if (!items.length) return null
-  const reps = Math.max(2, Math.ceil(12 / items.length))
-  const loop = Array.from({ length: reps }, () => items).flat()
-  const dur = Math.round(loop.length * 2.4)
-  const style = { '--mq-dur': `${dur}s` } as CSSProperties
-  return (
-    <div className={`ab-mq ${reverse ? 'mq-rev' : ''} ${className}`} style={style} aria-label={`${label}: ${items.join(', ')}`}>
-      <div className="ab-mq-track">
-        {[0, 1].map((g) => (
-          <ul key={g} className={`ab-mq-group ${className === 'ab-sk' ? 'ab-skills' : ''}`} aria-hidden={g === 1 ? 'true' : undefined}>
-            {loop.map((k, n) => <li key={`${k}-${n}`} className={n >= items.length ? 'dup' : undefined} style={{ animationDelay: `${(n % items.length) * -0.6}s` }}>{k}</li>)}
-          </ul>
-        ))}
-      </div>
-    </div>
-  )
-}
 function Cover({ p, i }: { p: Project; i: number }) {
   const src = p.cover || p.images[0]
   return <div className="cover" style={{ background: TINTS[i % TINTS.length] }}>{src ? <img src={src} alt={p.title} loading="lazy" /> : <span className="note">Cover not uploaded</span>}</div>
@@ -144,8 +116,15 @@ function Cover({ p, i }: { p: Project; i: number }) {
 function WorkSection({ limit }: { limit?: number }) {
   const { projects } = useContent()
   const [f, setF] = useState('All')
-  const list = [...projects].sort((a, b) => Number(b.featured) - Number(a.featured)).filter((p) => f === 'All' || p.category.includes(f))
-  const shown = limit ? list.slice(0, limit) : list
+  // Home page: "All" shows only the projects with a home_order (projects.json), in that order.
+  // Design / Development still list every project in that category, with the home picks first.
+  const picked = !!limit && projects.some((p) => p.home_order)
+  const byFeatured = [...projects].sort((a, b) => Number(b.featured) - Number(a.featured))
+  const byHome = [...projects].sort((a, b) => (a.home_order ?? 99) - (b.home_order ?? 99) || Number(b.featured) - Number(a.featured))
+  const list = picked
+    ? (f === 'All' ? byHome.filter((p) => p.home_order) : byHome.filter((p) => p.category.includes(f)))
+    : byFeatured.filter((p) => f === 'All' || p.category.includes(f))
+  const shown = limit && !(picked && f !== 'All') ? list.slice(0, limit) : list
   return (
     <>
       <div className="chips" role="group" aria-label="Filter projects">{['All', 'Design', 'Development'].map((c) => <button key={c} className="chip" aria-pressed={f === c} onClick={() => setF(c)}>{c}</button>)}</div>
@@ -206,7 +185,7 @@ export function Home() {
     <>
       <div className="wrap hero2">
         <div className="hero-copy">
-          <h1 aria-label={`${h.title} ${h.heading}`}><HeadLine text={h.title} start={0} /><HeadLine text={h.heading} start={h.title.split(/\s+/).filter(Boolean).length} /></h1>
+          <h1><span className="ln"><span>{h.title}</span></span><span className="ln"><span>{h.heading}</span></span></h1>
           <p className="id">{h.subtitle}</p>
           <p className="lead">{h.description}</p>
           <div className="cta">
@@ -224,7 +203,7 @@ export function Home() {
       <section id="work" className="wrap"><h2>Selected work</h2><WorkSection limit={6} /><p><Link className="btn" to="/work">All projects</Link></p></section>
       <section id="disciplines" className="band"><div className="wrap"><h2>Two disciplines, one workflow</h2>
         <div className="two">{services.map((s) => (
-          <div key={s.id}><h3>{s.title}</h3><p>{s.description}</p><SkillMarquee items={s.skills} label={s.title} className="two-mq" />{s.tools && <ToolList tools={s.tools} />}</div>
+          <div key={s.id}><h3>{s.title}</h3><p>{s.description}</p><ul>{s.skills.map((k) => <li key={k}>{k}</li>)}</ul>{s.tools && <ToolList tools={s.tools} />}</div>
         ))}</div>
       </div></section>
       <section id="about" className="wrap about">
@@ -235,7 +214,9 @@ export function Home() {
           <p className="lead">{a.description}</p>
           {a.skills.length > 0 && <>
             <h3 className="ab-label">Skills</h3>
-            <SkillMarquee items={a.skills} label="Skills" className="ab-sk" />
+            <div className="mq" role="list" aria-label="Skills">
+              <ul className="mq-track">{[...a.skills, ...a.skills, ...a.skills, ...a.skills].map((s, i) => <li key={i} role={i < a.skills.length ? 'listitem' : undefined} aria-hidden={i >= a.skills.length || undefined}>{s}</li>)}</ul>
+            </div>
           </>}
           {experience.length > 0 && <>
             <h3 className="ab-label">Experience</h3>
@@ -249,8 +230,7 @@ export function Home() {
             ))}</ol>
           </>}
           <div className="ab-cta">
-            {a.resume_url && <a className="btn p dl" href={a.resume_url} download><Download size={18} aria-hidden="true" /> Download resume</a>}
-            <A className={a.resume_url ? 'btn' : 'btn p'} href="#contact">Let's work together</A>
+            <A className="btn p" href="#contact">Let's work together</A>
             <SocialIcons items={socials} />
           </div>
         </div>
