@@ -1,6 +1,6 @@
 {
   "hero": {
-    "image": "/images/profile/8a6c990c7ab947d3b9a0d30bcf103157.png",
+    "image": "/images/profile/Media.jpeg",
     "title": "Designing digital experiences.",
     "heading": "Building them into reality.",
     "subtitle": "Creative Designer, UI/UX Designer and Frontend Developer.",
@@ -16,7 +16,7 @@
     "card_contact": "Contact"
   },
   "about": {
-    "image": "/images/profile/a550e72658ca458d908042c44383ef02.png",
+    "image": "/images/profile/Media.jpeg",
     "heading": "Designer and developer, comfortable on both sides of the handoff.",
     "description": "With more than a year of professional experience, I focus on user-centered interfaces, responsive web applications and reusable components.",
     "resume_url": "/resume/resume.pdf"

@@ -136,6 +136,16 @@ function WorkSection({ limit }: { limit?: number }) {
     </>
   )
 }
+function Marquee({ items }: { items: string[] }) {
+  const all = [0, 1, 2, 3].flatMap(() => items)
+  return (
+    <div className="mq">
+      <ul className="mq-track" style={{ animationDuration: `${items.length * 3.5}s` }}>
+        {all.map((t, i) => <li key={i} aria-hidden={i >= items.length || undefined}>{t}</li>)}
+      </ul>
+    </div>
+  )
+}
 function Lanyard({ image }: { image: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const tk = useThemeKey()
@@ -203,7 +213,7 @@ export function Home() {
       <section id="work" className="wrap"><h2>Selected work</h2><WorkSection limit={6} /><p><Link className="btn" to="/work">All projects</Link></p></section>
       <section id="disciplines" className="band"><div className="wrap"><h2>Two disciplines, one workflow</h2>
         <div className="two">{services.map((s) => (
-          <div key={s.id}><h3>{s.title}</h3><p>{s.description}</p><ul>{s.skills.map((k) => <li key={k}>{k}</li>)}</ul>{s.tools && <ToolList tools={s.tools} />}</div>
+          <div key={s.id}><h3>{s.title}</h3><p>{s.description}</p><Marquee items={s.skills} />{s.tools && <ToolList tools={s.tools} />}</div>
         ))}</div>
       </div></section>
       <section id="about" className="wrap about">
@@ -214,9 +224,7 @@ export function Home() {
           <p className="lead">{a.description}</p>
           {a.skills.length > 0 && <>
             <h3 className="ab-label">Skills</h3>
-            <div className="mq" role="list" aria-label="Skills">
-              <ul className="mq-track">{[...a.skills, ...a.skills, ...a.skills, ...a.skills].map((s, i) => <li key={i} role={i < a.skills.length ? 'listitem' : undefined} aria-hidden={i >= a.skills.length || undefined}>{s}</li>)}</ul>
-            </div>
+            <Marquee items={a.skills} />
           </>}
           {experience.length > 0 && <>
             <h3 className="ab-label">Experience</h3>
@@ -306,9 +314,9 @@ export function ProjectPage() {
         <button key={src} className="gal-i" onClick={() => setOpen(n)} aria-label={`Open image ${n + 1} of ${p.images.length}`}><img src={src} alt={`${p.title} screenshot ${n + 1}`} loading="lazy" decoding="async" /></button>
       ))}</div></>)}
       <nav className="pn" aria-label="Project navigation">
-        {prev ? <Link className="btn" to={`/work/${prev.slug}`} rel="prev"><ArrowLeft size={16} aria-hidden="true" /> {prev.title}</Link> : <span />}
+        {prev ? <Link className="btn" to={`/work/${prev.slug}`} rel="prev"><ArrowLeft size={16} aria-hidden="true" /> <span className="pn-t">{prev.title}</span></Link> : <span />}
         <Link className="btn p" to="/work">Back to Projects</Link>
-        {next ? <Link className="btn" to={`/work/${next.slug}`} rel="next">{next.title} <ArrowRight size={16} aria-hidden="true" /></Link> : <span />}
+        {next ? <Link className="btn" to={`/work/${next.slug}`} rel="next"><span className="pn-t">{next.title}</span> <ArrowRight size={16} aria-hidden="true" /></Link> : <span />}
       </nav>
       {open !== null && <Lightbox images={all} index={open} title={p.title} onClose={() => setOpen(null)} onIndex={setOpen} />}
     </article>
